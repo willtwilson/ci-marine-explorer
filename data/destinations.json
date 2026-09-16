@@ -1,0 +1,145 @@
+[
+  {
+    "classification": "portal_required",
+    "display_point": [
+      -1.782,
+      49.378
+    ],
+    "id": "carteret",
+    "name": "Carteret",
+    "routing_portal": [
+      -1.782,
+      49.368991
+    ]
+  },
+  {
+    "classification": "portal_required",
+    "display_point": [
+      -1.8167,
+      48.8667
+    ],
+    "id": "chausey",
+    "name": "Chausey",
+    "routing_portal": [
+      -1.808953,
+      48.861604
+    ]
+  },
+  {
+    "classification": "portal_required",
+    "display_point": [
+      -1.8167,
+      49.35
+    ],
+    "id": "dielette",
+    "name": "Dielette",
+    "routing_portal": [
+      -1.8167,
+      49.357207
+    ]
+  },
+  {
+    "classification": "portal_required",
+    "display_point": [
+      -2.1099,
+      49.1837
+    ],
+    "id": "elizabeth-marina",
+    "name": "Elizabeth Marina",
+    "routing_portal": [
+      -2.123683,
+      49.1837
+    ]
+  },
+  {
+    "classification": "portal_required",
+    "display_point": [
+      -1.5667,
+      48.8333
+    ],
+    "id": "granville",
+    "name": "Granville",
+    "routing_portal": [
+      -1.582184,
+      48.823107
+    ]
+  },
+  {
+    "classification": "portal_required",
+    "display_point": [
+      -2.5333,
+      49.4533
+    ],
+    "id": "guernsey",
+    "name": "Guernsey",
+    "routing_portal": [
+      -2.523501,
+      49.44693
+    ]
+  },
+  {
+    "classification": "portal_required",
+    "display_point": [
+      -2.0167,
+      48.6333
+    ],
+    "id": "saint-malo",
+    "name": "Saint-Malo",
+    "routing_portal": [
+      -2.024411,
+      48.628204
+    ]
+  },
+  {
+    "classification": "portal_required",
+    "display_point": [
+      -2.3533,
+      49.4333
+    ],
+    "id": "sark",
+    "name": "Sark",
+    "routing_portal": [
+      -2.339447,
+      49.4333
+    ]
+  },
+  {
+    "classification": "portal_required",
+    "display_point": [
+      -2.1167,
+      49.1667
+    ],
+    "id": "st-aubin",
+    "name": "St Aubin",
+    "routing_portal": [
+      -2.105677,
+      49.1667
+    ]
+  },
+  {
+    "classification": "portal_required",
+    "display_point": [
+      -2.1833,
+      49.1833
+    ],
+    "id": "st-brelade",
+    "name": "St Brelade",
+    "routing_portal": [
+      -2.191097,
+      49.178204
+    ]
+  },
+  {
+    "classification": "portal_required",
+    "display_point": [
+      -2.5333,
+      49.4533
+    ],
+    "id": "st-peter-port",
+    "name": "St Peter Port",
+    "routing_portal": [
+      -2.523501,
+      49.44693
+    ]
+  }
+]

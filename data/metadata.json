@@ -1,0 +1,32 @@
+{
+  "bundle_name": "channel-islands-public-marine-routes",
+  "catalogue_build_id": "20260916T113823Z_5faea635",
+  "catalogue_provenance_key": "8247003483f5e7e6",
+  "compiler": "spike_304_golden.py",
+  "compiler_version": "3.3.0",
+  "counts": {
+    "destinations": 11,
+    "hazards": 5,
+    "routes": 55
+  },
+  "files": [
+    {
+      "name": "destinations.json",
+      "sha256": "98039cde8adcdd9faa37a6bccca0467f179f724a24a5a2e85d3b3aeb88041986"
+    },
+    {
+      "name": "hazards.geojson",
+      "sha256": "5c3d0e4032730cfc5ae66dc1dbf4c44349a3da1810a4c4f8b8772c1dc1170351"
+    },
+    {
+      "name": "routes.geojson",
+      "sha256": "3a64d25e65e2594ef828e0d27145eb0034f3c62a6642f66d5819126b49138fb6"
+    }
+  ],
+  "freshness": "catalogue artifact as of its canonical build; see catalogue_build_id",
+  "generator": "public_bundle.exporter",
+  "generator_version": "1.0.0",
+  "hazard_note": "public reef/rock complexes from open sources (Wikipedia/OSM/Ramsar)",
+  "schema_version": "1.0",
+  "source": "Compiled from the accepted Channel Islands route catalogue (#288) via route_catalogue_runtime; hazard overlay from clearly-public sources (Wikipedia / OpenStreetMap / Ramsar RIS). Public data only."
+}

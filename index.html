@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="light dark" />
+  <title>Hermes Marine Route Explorer — Planning Inspection</title>
+  <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@6.9.0/dist/maplibre-gl.css" />
+  <style>
+    :root {
+      --ink: #17202a;
+      --muted: #53616d;
+      --bg: #f4f6f7;
+      --panel-bg: rgba(255, 255, 255, 0.97);
+      --border: #d9e0e5;
+      --accent: #1463ff;
+      --hard: #b3261e;
+      --warn: #bd6b00;
+      --uncertain: #9c6a00;
+      --aid: #5b7c99;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background: var(--bg);
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; min-height: 100%; }
+    body { min-height: 100dvh; }
+    .shell {
+      min-height: 100dvh;
+      display: grid;
+      grid-template-columns: minmax(300px, 360px) 1fr;
+    }
+    .panel {
+      padding: 20px 22px;
+      background: var(--panel-bg);
+      border-right: 1px solid var(--border);
+      overflow: auto;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .eyebrow {
+      margin: 0 0 6px;
+      font-size: 0.72rem;
+      font-weight: 750;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    h1 { margin: 0 0 4px; font-size: clamp(1.3rem, 3vw, 1.7rem); line-height: 1.12; }
+    .subtitle { margin: 0 0 14px; color: #5d6d7e; font-size: 0.88rem; }
+
+    .summary {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+    }
+    .metric {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 8px 10px;
+      background: #f9fbfc;
+      min-width: 0;
+    }
+    .metric span { display: block; color: #64727d; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    .metric strong { display: block; margin-top: 3px; overflow-wrap: anywhere; font-size: 1rem; }
+
+    .notice {
+      padding: 11px 13px;
+      border-left: 4px solid var(--warn);
+      border-radius: 7px;
+      background: #fff6e7;
+      color: #5f3b00;
+      font-size: 0.84rem;
+      line-height: 1.45;
+    }
+    .nonauth {
+      padding: 11px 13px;
+      border-left: 4px solid var(--aid);
+      border-radius: 7px;
+      background: #eaf1f6;
+      color: #2c465c;
+      font-size: 0.84rem;
+      line-height: 1.45;
+    }
+    .note { color: var(--muted); font-size: 0.82rem; line-height: 1.45; }
+    .muted { color: var(--muted); font-size: 0.78rem; line-height: 1.5; }
+
+    h2 {
+      margin: 2px 0 6px;
+      font-size: 0.72rem;
+      font-weight: 750;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .layers {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 12px;
+      background: #f9fbfc;
+    }
+    .layer-toggle {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 5px 0;
+      font-size: 0.86rem;
+      cursor: pointer;
+    }
+    .layer-toggle input { width: 16px; height: 16px; accent-color: var(--accent); cursor: pointer; }
+
+    .legend { display: grid; grid-template-columns: auto 1fr; gap: 5px 10px; font-size: 0.8rem; }
+    .legend .sw { width: 18px; height: 12px; border-radius: 3px; border: 1px solid rgba(0,0,0,0.15); align-self: center; }
+    .legend .sw.hard { background: var(--hard); }
+    .legend .sw.warn { background: var(--warn); }
+    .legend .sw.uncertain { background: var(--uncertain); }
+    .legend .sw.aid { background: var(--aid); }
+    .legend .sw.route { background: var(--accent); }
+    .legend .sw.unsupported { background: #8a4baf; border-radius: 50%; width: 12px; height: 12px; }
+    .legend .sw.dashed { border: 2px dashed var(--uncertain); background: transparent; }
+
+    .inspection {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 12px;
+      background: #f9fbfc;
+    }
+    #inspection-details { margin-top: 8px; }
+    #inspection-details:empty::before { content: 'Tap or click a route leg, waypoint, hazard or destination to inspect sanitized planning metadata.'; color: var(--muted); font-size: 0.8rem; }
+    .insp-row { display: flex; justify-content: space-between; gap: 10px; padding: 3px 0; font-size: 0.8rem; border-bottom: 1px dashed #e4e9ec; }
+    .insp-row span { color: var(--muted); }
+    .insp-row strong { text-align: right; overflow-wrap: anywhere; font-weight: 600; }
+
+    .links { font-size: 0.76rem; line-height: 1.5; color: #64727d; }
+    .links a { color: inherit; }
+
+    #viewer-error {
+      margin: 8px 0;
+      padding: 10px 12px;
+      background: #fee;
+      border: 1px solid #d88;
+      border-radius: 8px;
+      color: #7b1d1d;
+      font-size: 0.85rem;
+    }
+    #map { min-height: 100dvh; width: 100%; }
+    .maplibregl-ctrl-attrib { font-size: 10px; }
+
+    @media (max-width: 700px) {
+      .shell {
+        display: flex;
+        min-height: 100dvh;
+        flex-direction: column;
+      }
+      .panel {
+        flex: 0 0 auto;
+        padding: 12px 14px 10px;
+        border-right: 0;
+        border-bottom: 1px solid var(--border);
+        gap: 10px;
+        max-height: 46dvh;
+        overflow: auto;
+      }
+      .summary { grid-template-columns: repeat(3, 1fr); margin: 0; gap: 6px; }
+      .metric { padding: 6px 7px; }
+      .notice, .nonauth { padding: 8px 10px; font-size: 0.76rem; }
+      .subtitle, .note, .links { margin-top: 4px; }
+      h1 { font-size: 1.2rem; }
+      #map { min-height: 54dvh; flex: 1 1 auto; }
+      .layers, .inspection, .legend { border-radius: 8px; }
+      .layers { padding: 8px 10px; }
+      .layer-toggle { padding: 6px 0; min-height: 34px; } /* comfortable touch targets */
+    }
+    @media (prefers-color-scheme: dark) {
+      :root { color: #edf2f4; background: #11181d; }
+      .panel { background: rgba(20, 29, 35, 0.97); border-color: #39464f; }
+      .eyebrow, .subtitle, .note, .muted { color: #abb7bf; }
+      .metric, .layers, .inspection, .legend { background: #1b262d; border-color: #39464f; }
+      .metric span, .layer-toggle { color: #a7b2b9; }
+      .notice { background: #3b2b12; color: #ffdca5; }
+      .nonauth { background: #16232e; color: #bcd6e8; border-left-color: var(--aid); }
+      .insp-row span { color: #a7b2b9; }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <aside class="panel" aria-label="Planning bundle summary">
+      <div>
+        <p class="eyebrow">Hermes marine planning</p>
+        <h1 id="route-title">Loading planning bundle…</h1>
+        <p class="subtitle" id="route-subtitle">Planning inspection — sanitized public bundle</p>
+      </div>
+
+      <section class="summary" aria-label="Planning bundle metrics">
+        <div class="metric" id="metric-routes"><span>Planned routes</span><strong>—</strong></div>
+        <div class="metric" id="metric-waypoints"><span>Waypoints</span><strong>—</strong></div>
+        <div class="metric" id="metric-hazards"><span>Hazard zones</span><strong>—</strong></div>
+      </section>
+
+      <div class="notice">
+        <strong>Planning aid only.</strong> This viewer is not an official
+        nautical chart and the displayed routes are not a guarantee of
+        navigational safety. They are geometrically validated <em>planning</em>
+        candidates. Use current official charts, notices, pilotage information
+        and prudent seamanship for navigation.
+      </div>
+      <div class="nonauth">
+        <strong>Seamarks are informational only.</strong> Seamark overlays are
+        not an official chart or routing authority. They are for planning
+        reference and must not be used for navigation without an official chart.
+      </div>
+
+      <section aria-label="Layer toggles">
+        <h2>Layers</h2>
+        <div class="layers" id="layer-toggles"></div>
+      </section>
+
+      <section aria-label="Styling legend">
+        <h2>Legend</h2>
+        <div class="legend">
+          <span class="sw route"></span><span>Ordinary planned leg (supported)</span>
+          <span class="sw hard"></span><span>Land / hard exclusion (do not plan through)</span>
+          <span class="sw warn"></span><span>Uncertainty — verify clearance</span>
+          <span class="sw uncertain"></span><span>Uncertain — verify before planning</span>
+          <span class="sw aid"></span><span>Navigation aid (informational)</span>
+          <span class="sw unsupported"></span><span>Unsupported pair — no path</span>
+        </div>
+      </section>
+
+      <section class="inspection" aria-label="Inspected feature">
+        <h2>Inspection</h2>
+        <div id="inspection-details"></div>
+      </section>
+
+      <p class="note" id="route-note">Loading bundle metadata…</p>
+      <p class="muted" id="metadata-line"></p>
+      <p id="viewer-error" hidden role="alert"></p>
+
+      <p class="links">
+        Free/no-key basemap provided by <a href="https://openfreemap.org/">OpenFreeMap</a>
+        using OpenStreetMap data. Route/destination/hazard data is the <em>sanitized
+        public bundle</em> (#259) — no live vessel position, private berth/mooring
+        coordinates, or personal trip history. Derived leg bearing/distance are
+        computed geometrically from the bundle's own coordinates.
+      </p>
+    </aside>
+    <div id="map" role="application" aria-label="Interactive marine planning route map"></div>
+  </main>
+
+  <script type="module" src="./app.js"></script>
+</body>
+</html>

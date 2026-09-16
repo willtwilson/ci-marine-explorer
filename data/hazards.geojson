@@ -1,0 +1,211 @@
+{
+  "features": [
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            [
+              -2.395,
+              49.705
+            ],
+            [
+              -2.365,
+              49.705
+            ],
+            [
+              -2.365,
+              49.73
+            ],
+            [
+              -2.395,
+              49.73
+            ],
+            [
+              -2.395,
+              49.705
+            ]
+          ]
+        ],
+        "type": "Polygon"
+      },
+      "properties": {
+        "class": "hard_exclusion",
+        "id": "haz-casquets",
+        "licence": "CC BY-SA / ODbL",
+        "name": "Casquets Rocks",
+        "provenance": [
+          "Wikipedia: Les Casquets",
+          "OpenStreetMap"
+        ],
+        "source_type": "open_public_wiki+osm"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            [
+              -2.085,
+              49.295
+            ],
+            [
+              -2.045,
+              49.295
+            ],
+            [
+              -2.045,
+              49.335
+            ],
+            [
+              -2.085,
+              49.335
+            ],
+            [
+              -2.085,
+              49.295
+            ]
+          ]
+        ],
+        "type": "Polygon"
+      },
+      "properties": {
+        "class": "hard_exclusion",
+        "id": "haz-dirouilles",
+        "licence": "CC BY-SA / ODbL",
+        "name": "Dirouilles Rocks",
+        "provenance": [
+          "Wikipedia: Dirouilles",
+          "OpenStreetMap"
+        ],
+        "source_type": "open_public_wiki+osm"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            [
+              -1.965,
+              49.265
+            ],
+            [
+              -1.915,
+              49.265
+            ],
+            [
+              -1.915,
+              49.31
+            ],
+            [
+              -1.965,
+              49.31
+            ],
+            [
+              -1.965,
+              49.265
+            ]
+          ]
+        ],
+        "type": "Polygon"
+      },
+      "properties": {
+        "class": "hard_exclusion",
+        "id": "haz-ecrehous",
+        "licence": "CC BY-SA / ODbL",
+        "name": "Ecrehous Reef",
+        "provenance": [
+          "Wikipedia: Les Écréhous",
+          "OpenStreetMap"
+        ],
+        "source_type": "open_public_wiki+osm"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            [
+              -2.145,
+              48.935
+            ],
+            [
+              -2.025,
+              48.935
+            ],
+            [
+              -2.025,
+              49.035
+            ],
+            [
+              -2.145,
+              49.035
+            ],
+            [
+              -2.145,
+              48.935
+            ]
+          ]
+        ],
+        "type": "Polygon"
+      },
+      "properties": {
+        "class": "hard_exclusion",
+        "id": "haz-minquiers",
+        "licence": "CC BY-SA / Ramsar",
+        "name": "Minquiers Reef",
+        "provenance": [
+          "Wikipedia: Minquiers",
+          "Ramsar RIS 1455"
+        ],
+        "source_type": "open_public_wiki+ramsar"
+      },
+      "type": "Feature"
+    },
+    {
+      "geometry": {
+        "coordinates": [
+          [
+            [
+              -2.22,
+              49.272
+            ],
+            [
+              -2.18,
+              49.272
+            ],
+            [
+              -2.18,
+              49.298
+            ],
+            [
+              -2.22,
+              49.298
+            ],
+            [
+              -2.22,
+              49.272
+            ]
+          ]
+        ],
+        "type": "Polygon"
+      },
+      "properties": {
+        "class": "hard_exclusion",
+        "id": "haz-paternosters",
+        "licence": "CC BY-SA / Ramsar / ODbL",
+        "name": "Paternosters (Pierres de Lecq)",
+        "provenance": [
+          "Wikipedia: Les Pierres de Lecq",
+          "Ramsar RIS 1457",
+          "OpenStreetMap"
+        ],
+        "source_type": "open_public_wiki+ramsar+osm"
+      },
+      "type": "Feature"
+    }
+  ],
+  "type": "FeatureCollection"
+}
