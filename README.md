@@ -2,10 +2,11 @@
 
 This static site is the **public, planning-only** inspection surface for the
 accepted *Hermes marine route explorer* viewer plus the corresponding **#259
-sanitized public bundle**. It is served by GitHub Pages from this `gh-pages`
-branch for the sole purpose of demonstrating the viewer + bundle without
-exposing any private `hermes-config` content, credentials, or internal
-paths.
+sanitized public bundle**, and the **#290 weekend planner** (A→B canonical
+routes + a weekend weather/tide/sea-state conditions panel). It is served by
+GitHub Pages from this `gh-pages` branch for the sole purpose of
+demonstrating the viewer + planner + bundle without exposing any private
+`hermes-config` content, credentials, or internal paths.
 
 ## Source of truth
 
@@ -23,10 +24,13 @@ generated artifacts.
 |---|---|
 | `index.html` | viewer page, incl. planning-aid + seamark non-authoritative notices, OpenFreeMap/OSM attribution |
 | `app.js` | publish variant of the viewer logic (CONFIG.bundle -> `./data/*`) |
+| `weekend-planner.html` | #290 weekend planner page (A→B selector + conditions panel; planning-aid + source/freshness disclaimers) |
+| `planner.js` | #290 publish variant of the planner logic (PLANNER_CONFIG.bundle -> `./data/*` incl. conditions) |
 | `data/routes.geojson` | #259 sanitized public bundle |
 | `data/destinations.json` | #259 sanitized public bundle |
 | `data/hazards.geojson` | #259 sanitized public bundle |
 | `data/metadata.json` | #259 sanitized public bundle (freshness, source, counts) |
+| `data/conditions.json` | #290 dynamic conditions snapshot (time-stamped, refreshed separately from routes) |
 | `README.md` | this page |
 
 No other files are meant to exist here. Anything else is out-of-band and
@@ -34,17 +38,21 @@ should be reported.
 
 ## Pre-publish checks (run by the pipeline before every push)
 
-* **Strict denylist grep** over the four `data/*` bundle files: every token
-  (`token, secret, berth, mooring, vessel, aura, password, private_key,
-  api_key, apikey, credential, authorization, bearer, position, gps, ais,
-  live, trip, internal, /opt, /root, /home, /etc`) — fail on ANY hit.
-* **Artifact denylist** over the viewer + this README: fail on any real
-  private artifact (absolute private Unix/Windows paths, ssh/private keys,
-  credential/API-key assignments). The viewer's planning-aid disclaimer and
-  its own browser-side list-of-rejected-tokens are public by design and are
-  NOT re-flagged.
-* **Path integrity** — the published `app.js` references only relative
-  `./data/*` bundle paths: no private-repo-relative paths, no
+* **Strict denylist grep** over the `data/*` bundle files (routes,
+  destinations, hazards, metadata) **and** the conditions snapshot: every
+  token (`token, secret, berth, mooring, vessel, aura, password,
+  private_key, api_key, apikey, credential, authorization, bearer,
+  position, gps, ais, live, trip, internal, /opt, /root, /home, /etc`) —
+  fail on ANY hit. `data/conditions.json` is scanned too because it is
+  shipped in `data/`.
+* **Artifact denylist** over the viewer + planner + this README: fail on any
+  real private artifact (absolute private Unix/Windows paths, ssh/private
+  keys, credential/API-key assignments). The planning-aid disclaimer and
+  the browser-side list-of-rejected-tokens are public by design and are NOT
+  re-flagged.
+* **Path integrity** — the published `app.js` and `planner.js` reference
+  only relative `./data/*` bundle paths (planner also re-points its
+  conditions snapshot): no private-repo-relative paths, no
   absolute/private paths.
 * **Bundle re-validation** with `public_bundle.validator.validate_bundle`
   on the staged `data/` directory (allowlist + denylist + structural
@@ -89,3 +97,16 @@ notices, pilotage information and prudent seamanship for navigation.
 chart or routing authority and must not be used for navigation without an
 official chart. No live vessel position, private berth/mooring coordinates or
 personal trip history are published here.
+
+## Weekend planner conditions (#290)
+
+The weekend planner's **conditions panel** (weather / tide / sea-state) is a
+planning aid. It reads a **separate, time-stamped conditions snapshot**
+(`data/conditions.json`) distinct from the static route geometry. When the
+snapshot is missing, stale, or in the "data pending" state the panel shows an
+explicit **unavailable / stale / pending** label with the source + freshness
+— it never fabricates numbers. Route geometry only changes when the #288
+catalogue changes; the scheduled-refresh mechanism (`refresh_conditions.py`)
+updates **only** the conditions snapshot and never the routes. The
+conditions dimension needs free/public, re-distributable data and
+**human/domain review before being relied on**.

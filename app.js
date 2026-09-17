@@ -826,4 +826,12 @@ function waypointTotal(bundle) {
   return total;
 }
 
-start();
+// Auto-start the #260 viewer only when its own containers are present, so
+// the module may be imported by the #290 weekend planner (to reuse
+// validateBundle / haversineKm / initialBearing) without side-effects.
+if (document.querySelector('#map') &&
+    document.querySelector('#viewer-error') &&
+    document.querySelector('#inspection-details')) {
+  start();
+}
+
